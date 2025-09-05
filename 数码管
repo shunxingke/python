@@ -1,0 +1,25 @@
+import time
+from machine import Pin,PWM,ADC
+from common.four_digits_seg import Seg4Digit
+
+if __name__ == '__main__':
+    # 初始化 4 位数码管对象
+
+    seg_object = Seg4Digit(seg_1=14, seg_2=25, seg_3=33, seg_4=19, a=27, b=32, c=5, d=21, e=4, f=26, g=18, dp=17)
+    led_PWM = PWM(Pin(2,Pin.OUT),freq = 2000)
+    led1 = Pin(15,Pin.OUT)
+    adc1 = ADC(Pin(34),atten=ADC.ATTN_11DB)
+    
+    while True:
+        seg_object.display_number(0,3)
+        print(f'adc: {adc1.read_u16()}')
+        for i in range(1023):
+            led_PWM.duty(i)
+            time.sleep_ms(1)
+        for i in range(1023,0,-1):
+            led_PWM.duty(i)
+            time.sleep_ms(1)
+        led1.value(1)
+        time.sleep_ms(1000)
+        
+
